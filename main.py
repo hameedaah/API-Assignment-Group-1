@@ -16,7 +16,7 @@ books = [
     {"title": "Things fall apart", "author": "Chinua Achebe"},
     {"title": "Independence", "author": "Hope Agbaje"},
     {"title": "Last days in forcados", "author": "Bola Tinubu"},
-    {"title": "48 laws of power", "author": ""},
+    {"title": "48 laws of power days", "author": ""},
 ]
 
 
@@ -67,9 +67,23 @@ def delete_book_by_title(book_title):
     return f"Success: {book['title']} has been removed"
 
 def find_empty_authors(book_title):
+    # empty_books = []
     for book in books:
         if book_title.lower() == book["title"].lower() and book["author"] == "":
-            return 
+            # empty_books.append(f'"{book["title"]}" has an empty author')
+            return f"{book['title']} has an empty author"
+    return "This book has an author"
+
+def search_by_keyword(the_keyword):
+    search_results = []
+    for book in books:
+        if the_keyword.lower() in book["title"].lower() or (book["author"] == "" and the_keyword.lower() in book["title"].lower()):
+            search_results.append({"title": book["title"], "author": book["author"]})
+
+    if search_results:
+        return search_results
+    else:
+        return "No matches in the database"
 
 
 
@@ -114,10 +128,10 @@ def del_book(request:dict):
     return response
 
 #Return a rendom book
-import random
-@app.get("/random-book")
-def random_book():
-    return random.choice(books)
+# import random
+# @app.get("/random-book")
+# def random_book():
+#     return random.choice(books)
 
 #counts the number of books in our lst
 # @app.get("/count-books")
@@ -131,3 +145,14 @@ def random_book():
 #     return result
 
 #find empty authors
+# @app.post("/return-empty-authors-by-title")
+# def find_book(request:dict):
+#     book_name = request["book_name"]
+#     response = find_empty_authors(book_name)
+#     return response
+
+#search by keywords
+@app.put("/search-books-by-keywords")
+def search_book(the_keyword: str):
+    result = search_by_keyword(the_keyword)
+    return result
