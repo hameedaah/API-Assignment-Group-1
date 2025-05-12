@@ -13,7 +13,12 @@ books = [
     {"title": "Book 8", "author": "Author 8"},
     {"title": "Book 9", "author": "Author 9"},
     {"title": "Book 10", "author": "Author 10"},
+    {"title": "Things fall apart", "author": "Chinua Achebe"},
+    {"title": "Independence", "author": "Hope Agbaje"},
+    {"title": "Last days in forcados", "author": "Bola Tinubu"},
+    {"title": "48 laws of power", "author": ""},
 ]
+
 
 #ALL FUNCTIONS
 print('Testing new branch')
@@ -44,12 +49,28 @@ def add_new_book_to_list(title: str, author: str):
     books.append({"title": title, "author": author})
     return "Success"
 
+def update_book_by_title(current_title: str, new_title: str = None, new_author: str = None):
+    for book in books:
+        if book["title"].lower() == current_title.lower():
+            if new_title:
+                book["title"] = new_title
+            if new_author:
+                book["author"] = new_author
+            return {"message": "Book updated successfully"}
+    return {"error": "Book not found"}
+
 def delete_book_by_title(book_title):
     for book in books:
         if book_title.lower() == book["title"].lower():
             books.remove(book)
 
     return f"Success: {book['title']} has been removed"
+
+def find_empty_authors(book_title):
+    for book in books:
+        if book_title.lower() == book["title"].lower() and book["author"] == "":
+            return 
+
 
 
 #ALL ENDPOINTS
@@ -92,5 +113,21 @@ def del_book(request:dict):
     response = delete_book_by_title(book_name)
     return response
 
+#Return a rendom book
+import random
+@app.get("/random-book")
+def random_book():
+    return random.choice(books)
 
-#print(get_book_by_title("book 1"))
+#counts the number of books in our lst
+# @app.get("/count-books")
+# def count_books():
+#     return {"count": len(books)}
+
+#Used to edit books in the list
+# @app.put("/update-book")
+# def update_book(current_title: str, new_title: str = None, new_author: str = None):
+#     result = update_book_by_title(current_title, new_title, new_author)
+#     return result
+
+#find empty authors
