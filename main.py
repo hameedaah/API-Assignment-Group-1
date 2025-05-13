@@ -105,54 +105,54 @@ def book_by_name(request:dict):
     response = get_book_by_title(book_name)
     return response
 
-@app.post("/get-book-by-author")
-def book_by_author(request: dict):
-    author = request["author"]
-    response = post_book_by_author(author)
-    return response
+# @app.post("/get-book-by-author")
+# def book_by_author(request: dict):
+#     author = request["author"]
+#     response = post_book_by_author(author)
+#     return response
 
-@app.post("/add-new-book")
-def add_book(request: dict):
-    title = request["title"]
-    author = request["author"]
-    result = add_new_book_to_list(title, author)
+# @app.post("/add-new-book")
+# def add_book(request: dict):
+#     title = request["title"]
+#     author = request["author"]
+#     result = add_new_book_to_list(title, author)
 
-    if result.startswith("Error"):
-        return {"error": result}
-    return {"message": result}
+#     if result.startswith("Error"):
+#         return {"error": result}
+#     return {"message": result}
 
-@app.delete("/delete-book-by-title")
-def del_book(request:dict):
-    book_name = request["book_name"]
-    response = delete_book_by_title(book_name)
-    return response
+# @app.delete("/delete-book-by-title")
+# def del_book(request:dict):
+#     book_name = request["book_name"]
+#     response = delete_book_by_title(book_name)
+#     return response
 
 #Return a rendom book
-import random
-@app.get("/random-book")
-def random_book():
-    return random.choice(books)
+# import random
+# @app.get("/random-book")
+# def random_book():
+#     return random.choice(books)
 
 #counts the number of books in our lst
-@app.get("/count-books")
-def count_books():
-    return {"count": len(books)}
+# @app.get("/count-books")
+# def count_books():
+#     return {"count": len(books)}
 
 #Used to edit books in the list
-@app.put("/update-book")
-def update_book(current_title: str, new_title: str = None, new_author: str = None):
-    result = update_book_by_title(current_title, new_title, new_author)
-    return result
+# @app.put("/update-book")
+# def update_book(current_title: str, new_title: str = None, new_author: str = None):
+#     result = update_book_by_title(current_title, new_title, new_author)
+#     return result
 
 #find empty authors
-@app.post("/return-empty-authors-by-title")
-def find_book(request:dict):
-    book_name = request["book_name"]
-    response = find_empty_authors(book_name)
-    return response
+# @app.post("/return-empty-authors-by-title")
+# def find_book(request:dict):
+#     book_name = request["book_name"]
+#     response = find_empty_authors(book_name)
+#     return response
 
 #search by keywords
-@app.put("/search-books-by-keywords")
-def search_book(the_keyword: str):
-    result = search_by_keyword(the_keyword)
-    return result
+# @app.put("/search-books-by-keywords")
+# def search_book(the_keyword: str):
+#     result = search_by_keyword(the_keyword)
+#     return result
