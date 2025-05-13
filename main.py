@@ -33,7 +33,7 @@ def get_book_by_title(book_title):
             new_books.append(book)
     return new_books
 
-def post_book_by_author(author_name):
+def get_book_by_author(author_name):
     new_books = []
     for book in books:
         if author_name.lower() == book["author"].lower():
@@ -94,7 +94,7 @@ def book_by_name(request:dict):
 @app.post("/get-book-by-author")
 def book_by_author(request: dict):
     author = request["author"]
-    response = post_book_by_author(author)
+    response = get_book_by_author(author)
     return response
 
 @app.post("/add-new-book")
@@ -124,7 +124,7 @@ def random_book():
 # def count_books():
 #     return {"count": len(books)}
 
-#Used to edit books in the list
+# Used to edit books in the list
 # @app.put("/update-book")
 # def update_book(current_title: str, new_title: str = None, new_author: str = None):
 #     result = update_book_by_title(current_title, new_title, new_author)
