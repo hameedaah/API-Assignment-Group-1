@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 import random
 
 app = FastAPI()
@@ -20,6 +21,23 @@ books = [
     {"title": "48 laws of power days", "author": ""},
 ]
 
+class Book(BaseModel):
+    title: str
+    author: str
+
+class BookTitleRequest(BaseModel):
+    book_name: str
+
+class BookAuthorRequest(BaseModel):
+    author: str
+
+class BookUpdateRequest(BaseModel):
+    current_title: str
+    new_title: str = None
+    new_author: str = None
+
+class BookKeywordRequest(BaseModel):
+    the_keyword: str
 
 #ALL FUNCTIONS
 def is_prime(n):
@@ -48,7 +66,7 @@ def get_book_by_author(author_name):
     return new_books
 
 
-def add_new_book_to_list(title: str, author: str):
+def add_new_book_to_list(title, author):
     for existing_book in books:
         if existing_book["title"].lower() == title.lower() and existing_book["author"].lower() == author.lower():
             return "Error: This book already exists."
@@ -56,7 +74,7 @@ def add_new_book_to_list(title: str, author: str):
     books.append({"title": title, "author": author})
     return f"Success: {title} has been added"
 
-def update_book_by_title(current_title: str, new_title: str = None, new_author: str = None):
+def update_book_by_title(current_title, new_title, new_author):
     for book in books:
         if book["title"].lower() == current_title.lower():
             if new_title:
@@ -114,15 +132,15 @@ def all_books():
 
 #Return books by title
 @app.post("/get-book-by-name")
-def book_by_name(request:dict):
-    book_name = request["book_name"]
+def book_by_name(request: BookTitleRequest):
+    book_name = request.book_name
     response = get_book_by_title(book_name)
     return response
 
 #Return books by author
 @app.post("/get-book-by-author")
-def book_by_author(request: dict):
-    author = request["author"]
+def book_by_author(request: BookAuthorRequest):
+    author = request.author
     response = get_book_by_author(author)
     return response
 
@@ -134,9 +152,9 @@ def book_by_prime():
 
 #Add a new book to the list
 @app.post("/add-new-book")
-def add_book(request: dict):
-    title = request["title"]
-    author = request["author"]
+def add_book(request: Book):
+    title = request.title
+    author = request.author
     result = add_new_book_to_list(title, author)
 
     if result.startswith("Error"):
@@ -145,8 +163,8 @@ def add_book(request: dict):
 
 #Remove a book from the list
 @app.delete("/delete-book-by-title")
-def del_book(request:dict):
-    book_name = request["book_name"]
+def del_book(request: BookTitleRequest):
+    book_name = request.book_name
     response = delete_book_by_title(book_name)
     return response
 
@@ -162,19 +180,23 @@ def count_books():
 
 #Update the title and author of a book
 @app.put("/update-book")
-def update_book(current_title: str, new_title: str = None, new_author: str = None):
+def update_book(request: BookUpdateRequest):
+    current_title = request.current_title
+    new_title = request.new_title
+    new_author = request.new_author
     result = update_book_by_title(current_title, new_title, new_author)
     return result
 
 #Check if book has an author
 @app.post("/return-empty-authors-by-title")
-def find_book(request:dict):
-    book_name = request["book_name"]
+def find_book(request: BookTitleRequest):
+    book_name = request.book_name
     response = find_empty_authors(book_name)
     return response
 
 #Find books and authors by keywords
-@app.get("/search-books-by-keywords")
-def search_book(the_keyword: str):
+@app.post("/search-books-by-keywords")
+def search_book(request: BookKeywordRequest):
+    the_keyword = request.the_keyword
     result = search_by_keyword(the_keyword)
     return result
