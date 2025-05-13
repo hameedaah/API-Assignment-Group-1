@@ -133,13 +133,23 @@ import random
 def random_book():
     return random.choice(books)
 
+#counts the number of books in our lst
+@app.get("/count-books")
+def count_books():
+    return {"count": len(books)}
 
-# #find empty authors
-# @app.post("/return-empty-authors-by-title")
-# def find_book(request:dict):
-#     book_name = request["book_name"]
-#     response = find_empty_authors(book_name)
-#     return response
+#Used to edit books in the list
+@app.put("/update-book")
+def update_book(current_title: str, new_title: str = None, new_author: str = None):
+    result = update_book_by_title(current_title, new_title, new_author)
+    return result
+
+#find empty authors
+@app.post("/return-empty-authors-by-title")
+def find_book(request:dict):
+    book_name = request["book_name"]
+    response = find_empty_authors(book_name)
+    return response
 
 #search by keywords
 @app.put("/search-books-by-keywords")
